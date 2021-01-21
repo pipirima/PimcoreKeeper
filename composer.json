@@ -1,0 +1,38 @@
+{
+  "name": "pipirima/pimcore-keeper",
+  "type": "pimcore-bundle",
+  "license": "GPL-3.0-or-later",
+  "description": "PimcoreKeeper observes events and notifies users about them. It may prevent some actions to happen.",
+  "keywords": [
+    "pimcore",
+    "observer",
+    "events",
+    "pimcore-plugin",
+    "pimcore-bundle"
+  ],
+  "homepage": "https://github.com/pipirima/PimcoreKeeper",
+  "authors": [
+    {
+      "name": "Wojciech Peisert",
+      "email": "info@sauron.pl",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "pimcore/pimcore": "^6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pipirima\\PimcoreKeeperBundle\\": "src/PimcoreKeeperBundle"
+    }
+  },
+  "extra": {
+    "pimcore": {
+      "bundles": [
+        "Pipirima\\PimcoreKeeperBundle\\PimcoreKeeperBundle"
+      ]
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
