@@ -1,12 +1,12 @@
 <?php
 
-namespace PimcoreKeeperBundle;
+namespace Pipirima\PimcoreKeeperBundle;
 
 use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
 
 /**
  * Class PimcoreKeeperBundle
- * @package PimcoreKeeperBundle
+ * @package Pipirima\PimcoreKeeperBundle
  */
 class PimcoreKeeperBundle extends AbstractPimcoreBundle
 {
