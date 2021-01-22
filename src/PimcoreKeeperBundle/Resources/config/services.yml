@@ -1,0 +1,9 @@
+services:
+    Pipirima\PimcoreKeeperBundle\EventListener\ClassDefListener:
+        tags:
+            - { name: kernel.event_listener, event: pimcore.class.preAdd }
+            - { name: kernel.event_listener, event: pimcore.class.postAdd }
+            - { name: kernel.event_listener, event: pimcore.class.preUpdate }
+            - { name: kernel.event_listener, event: pimcore.class.postUpdate }
+            - { name: kernel.event_listener, event: pimcore.class.preDelete }
+            - { name: kernel.event_listener, event: pimcore.class.postDelete }
