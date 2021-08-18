@@ -42,7 +42,7 @@ class ClassEventListener
             return;
         }
 
-        $toEmail = $this->websiteSettingsService->getTextValue(self::KEEPER_EMAIL_WS);
+        $toEmail = $this->websiteSettingsService->getTextValue(self::CLASS_EVENT_EMAIL_WS);
         if (empty($toEmail)) {
             return;
         }
