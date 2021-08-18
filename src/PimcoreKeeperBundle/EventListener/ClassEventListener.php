@@ -4,24 +4,21 @@ namespace Pipirima\PimcoreKeeperBundle\EventListener;
 
 use Pimcore\Event\Model\DataObject\ClassDefinitionEvent;
 use Pimcore\Tool;
+use Pipirima\PimcoreKeeperBundle\PimcoreKeeperBundle;
 use Pipirima\PimcoreKeeperBundle\Service\MailerService;
 use Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService;
-use Psr\Log\LoggerInterface;
 
 class ClassEventListener
 {
     const CLASS_EVENT_EMAIL_WS = 'class_event_email';
 
-    protected LoggerInterface $logger;
     protected MailerService $mailer;
     protected WebsiteSettingsService $websiteSettingsService;
 
     public function __construct(
-        LoggerInterface $logger,
         MailerService $mailer,
         WebsiteSettingsService $websiteSettingsService
     ) {
-        $this->logger = $logger;
         $this->mailer = $mailer;
         $this->websiteSettingsService = $websiteSettingsService;
     }
@@ -30,14 +27,15 @@ class ClassEventListener
     {
         $event = $funcArguments[0];
         if (!$event instanceof ClassDefinitionEvent) {
-            $this->logger->debug('PimcoreKeeper: ' . $funcName . ": " . get_class($event));
+            $message = $funcName . ": " . get_class($event);
+            \Pimcore\Log\Simple::log(PimcoreKeeperBundle::LOG_FILE, $message);
             return;
         }
         $classDefinition = $event->getClassDefinition();
         $classId = $classDefinition->getId();
         $className = $classDefinition->getName();
-        $textMessage = "PimcoreKeeper: func $funcName: class: id: $classId name: $className";
-        $this->logger->debug($textMessage);
+        $textMessage = "func $funcName: class: id: $classId name: $className";
+        \Pimcore\Log\Simple::log(PimcoreKeeperBundle::LOG_FILE, $textMessage);
         if (false !== strpos($funcName, "Pre")) {
             return;
         }
