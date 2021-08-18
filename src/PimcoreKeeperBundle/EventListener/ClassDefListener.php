@@ -3,53 +3,53 @@
 namespace Pipirima\PimcoreKeeperBundle\EventListener;
 
 use Pimcore\Event\Model\DataObject\ClassDefinitionEvent;
-use Pimcore\Model\WebsiteSetting;
+use Pimcore\Tool;
+use Pipirima\PimcoreKeeperBundle\Service\MailerService;
+use Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService;
+use Psr\Log\LoggerInterface;
 
 class ClassDefListener
 {
     const KEEPER_EMAIL_WS = 'keeper_email';
 
+    protected LoggerInterface $logger;
+    protected MailerService $mailer;
+    protected WebsiteSettingsService $websiteSettingsService;
+
+    public function __construct(
+        LoggerInterface $logger,
+        MailerService $mailer,
+        WebsiteSettingsService $websiteSettingsService
+    ) {
+        $this->logger = $logger;
+        $this->mailer = $mailer;
+        $this->websiteSettingsService = $websiteSettingsService;
+    }
+
     public function __call(string $funcName, array $funcArguments)
     {
         $event = $funcArguments[0];
         if (!$event instanceof ClassDefinitionEvent) {
-            $this->log($funcName . ": " . get_class($event));
+            $this->logger->debug('PimcoreKeeper: ' . $funcName . ": " . get_class($event));
             return;
         }
         $classDefinition = $event->getClassDefinition();
         $classId = $classDefinition->getId();
         $className = $classDefinition->getName();
-        $message = "func $funcName: class: id: $classId name: $className";
-        $this->log($message);
-        if (false === strpos($funcName, "Pre")) {
-            $this->mail($message);
-        }
-    }
-
-    private function log(string $message)
-    {
-        $filename = 'keeper_events.log';
-        $content = file_exists($filename) ? file_get_contents($filename) : '';
-        $content .= $message . "\n";
-        file_put_contents($filename, $content);
-    }
-
-    private function mail(string $message)
-    {
-        $hostUrl = strval(\Pimcore\Tool::getHostUrl());
-        $mail = new \Pimcore\Mail($hostUrl . ": Class change notification");
-        $websiteSetting = WebsiteSetting::getByName(self::KEEPER_EMAIL_WS);
-        if (!$websiteSetting instanceof WebsiteSetting) {
+        $textMessage = "PimcoreKeeper: func $funcName: class: id: $classId name: $className";
+        $this->logger->debug($textMessage);
+        if (false !== strpos($funcName, "Pre")) {
             return;
         }
-        $email = strval($websiteSetting->getData());
-        $mail->addTo($email);
-        $mail->setBodyText($message);
-        try {
-            $mail->send();
-        } catch (Exception $e) {
-            $message = "sendmail exception: " . $e->getMessage();
-            $this->log($message);
+
+        $toEmail = $this->websiteSettingsService->getTextValue(self::KEEPER_EMAIL_WS);
+        if (empty($toEmail)) {
+            return;
         }
+
+        $hostUrl = strval(Tool::getHostUrl());
+        $subject = $hostUrl . ": Class change notification";
+
+        $this->mailer->send($subject, $textMessage, $toEmail);
     }
 }
