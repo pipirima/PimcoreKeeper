@@ -8,9 +8,9 @@ use Pipirima\PimcoreKeeperBundle\Service\MailerService;
 use Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService;
 use Psr\Log\LoggerInterface;
 
-class ClassDefListener
+class ClassEventListener
 {
-    const KEEPER_EMAIL_WS = 'keeper_email';
+    const CLASS_EVENT_EMAIL_WS = 'class_event_email';
 
     protected LoggerInterface $logger;
     protected MailerService $mailer;
