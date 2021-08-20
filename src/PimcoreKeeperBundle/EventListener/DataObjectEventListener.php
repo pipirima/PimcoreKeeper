@@ -2,16 +2,16 @@
 
 namespace Pipirima\PimcoreKeeperBundle\EventListener;
 
-use Pimcore\Event\Model\DataObject\ClassDefinitionEvent;
+use Pimcore\Event\Model\DataObjectEvent;
 use Pimcore\Tool;
 use Pipirima\PimcoreKeeperBundle\PimcoreKeeperBundle;
 use Pipirima\PimcoreKeeperBundle\Service\ConfigService;
 use Pipirima\PimcoreKeeperBundle\Service\MailerService;
 use Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService;
 
-class ClassEventListener
+class DataObjectEventListener
 {
-    const CLASS_EVENT_EMAIL_WS = 'class_event_email';
+    const DATAOBJECT_EVENT_EMAIL_WS = 'dataobject_event_email';
 
     protected MailerService $mailer;
     protected WebsiteSettingsService $websiteSettingsService;
@@ -32,22 +32,27 @@ class ClassEventListener
         echo "XXX   CONFIG    XXX \n";
         print_r($this->config->getConfig());
 
+        exit;
+
         $event = $funcArguments[0];
-        if (!$event instanceof ClassDefinitionEvent) {
+        if (!$event instanceof DataObjectEvent) {
             $message = $funcName . ": " . get_class($event);
             \Pimcore\Log\Simple::log(PimcoreKeeperBundle::LOG_FILE, $message);
             return;
         }
-        $classDefinition = $event->getClassDefinition();
-        $classId = $classDefinition->getId();
-        $className = $classDefinition->getName();
-        $textMessage = "func $funcName: class: id: $classId name: $className";
+        $obj = $event->getObject();
+
+        $class = get_class($obj);
+        $className = array_pop(explode("\\", $class));
+
+        $textMessage = "PimcoreKeeper: class: $class  classname: $className";
         \Pimcore\Log\Simple::log(PimcoreKeeperBundle::LOG_FILE, $textMessage);
+        return;
         if (false !== strpos($funcName, "Pre")) {
             return;
         }
 
-        $toEmail = $this->websiteSettingsService->getTextValue(self::CLASS_EVENT_EMAIL_WS);
+        $toEmail = $this->websiteSettingsService->getTextValue(self::DATAOBJECT_EVENT_EMAIL_WS);
         if (empty($toEmail)) {
             return;
         }

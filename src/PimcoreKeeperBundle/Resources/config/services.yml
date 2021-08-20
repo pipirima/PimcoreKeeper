@@ -8,6 +8,9 @@ services:
         # this means you cannot fetch services directly from the container via $container->get()
         # if you need to do this, you can override this setting on individual services
         public: false
+    Pipirima\PimcoreKeeperBundle\Service\ConfigService:
+        arguments:
+            - '%pimcore_keeper.alerts%'
     Pipirima\PimcoreKeeperBundle\EventListener\ClassEventListener:
         tags:
             - { name: kernel.event_listener, event: pimcore.class.preAdd }
@@ -19,3 +22,17 @@ services:
     Pipirima\PimcoreKeeperBundle\Service\MailerService: ~
     Pipirima\PimcoreKeeperBundle\Service\MailFactory: ~
     Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService: ~
+    Pipirima\PimcoreKeeperBundle\EventListener\DataObjectEventListener:
+        tags:
+            - { name: kernel.event_listener, event: pimcore.dataobject.preAdd }
+            - { name: kernel.event_listener, event: pimcore.dataobject.postAdd }
+            - { name: kernel.event_listener, event: pimcore.dataobject.postAddFailure }
+            - { name: kernel.event_listener, event: pimcore.dataobject.preUpdate }
+            - { name: kernel.event_listener, event: pimcore.dataobject.postUpdate }
+            - { name: kernel.event_listener, event: pimcore.dataobject.postUpdateFailure }
+            - { name: kernel.event_listener, event: pimcore.dataobject.deleteInfo }
+            - { name: kernel.event_listener, event: pimcore.dataobject.preDelete }
+            - { name: kernel.event_listener, event: pimcore.dataobject.postDelete }
+            - { name: kernel.event_listener, event: pimcore.dataobject.postDeleteFailure }
+            - { name: kernel.event_listener, event: pimcore.dataobject.postCopy }
+            - { name: kernel.event_listener, event: pimcore.dataobject.postCsvItemExport }

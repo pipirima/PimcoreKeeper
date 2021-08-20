@@ -24,6 +24,25 @@ class Configuration implements ConfigurationInterface
         // configure your bundle. See the documentation linked above for
         // more information on that topic.
 
+        $treeBuilder->getRootNode()->ignoreExtraKeys(false);
+
+/*
+        $treeBuilder->getRootNode()
+            ->children()
+                ->arrayNode('alerts')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('email')->end()
+                            ->scalarNode('class')->end()
+                            ->arrayNode('fields')
+                                ->scalarPrototype()->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+*/
         return $treeBuilder;
     }
 }
