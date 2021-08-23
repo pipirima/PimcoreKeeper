@@ -17,9 +17,8 @@ class EventHandlerFactory
     /**
      * @return EventHandlerInterface[]
      */
-    public function getHandlers(array $arguments): array
+    public function getHandlers(): iterable
     {
-        // @TODO - WP
-        //
+        return $this->handlers;
     }
 }

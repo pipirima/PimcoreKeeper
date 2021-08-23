@@ -4,52 +4,48 @@ namespace Pipirima\PimcoreKeeperBundle\EventHandler;
 
 use Pimcore\Event\Model\DataObject\ClassDefinitionEvent;
 use Pimcore\Tool;
-use Pipirima\PimcoreKeeperBundle\PimcoreKeeperBundle;
-use Pipirima\PimcoreKeeperBundle\Service\ConfigService;
+use Pipirima\PimcoreKeeperBundle\Factory\EventHandlerInterface;
+use Pipirima\PimcoreKeeperBundle\Logger\LoggerInterface;
+use Pipirima\PimcoreKeeperBundle\Service\EventToFunctionService;
 use Pipirima\PimcoreKeeperBundle\Service\MailerService;
-use Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService;
 
-class ClassEventHandler
+class ClassEventHandler implements EventHandlerInterface
 {
-    protected array $config;
-
     protected MailerService $mailer;
-    protected WebsiteSettingsService $websiteSettingsService;
 
-    public function __construct(
-        MailerService $mailer,
-        WebsiteSettingsService $websiteSettingsService
-    ) {
+    protected LoggerInterface $logger;
+
+    protected EventToFunctionService $eventToFunctionService;
+
+    public function __construct(MailerService $mailer, LoggerInterface $logger, EventToFunctionService $eventToFunctionService)
+    {
         $this->mailer = $mailer;
-        $this->websiteSettingsService = $websiteSettingsService;
+        $this->logger = $logger;
+        $this->eventToFunctionService = $eventToFunctionService;
     }
 
-    public function setConfig(array $config)
+    public function handle(array $config, array $arguments)
     {
-        $this->config = $config;
-    }
+        $funcName = $arguments[0];
 
-    public function handle(string $funcName, array $funcArguments)
-    {
-        echo "XXX   CONFIG    XXX \n";
-        print_r($this->config);
-
-        $event = $funcArguments[0];
-        if (!$event instanceof ClassDefinitionEvent) {
-            $message = $funcName . ": " . get_class($event);
-            \Pimcore\Log\Simple::log(PimcoreKeeperBundle::LOG_FILE, $message);
-            return;
-        }
-        $classDefinition = $event->getClassDefinition();
-        $classId = $classDefinition->getId();
-        $className = $classDefinition->getName();
-        $textMessage = "func $funcName: class: id: $classId name: $className";
-        \Pimcore\Log\Simple::log(PimcoreKeeperBundle::LOG_FILE, $textMessage);
         if (false !== strpos($funcName, "Pre")) {
             return;
         }
 
-        $toEmail = $this->websiteSettingsService->getTextValue(self::CLASS_EVENT_EMAIL_WS);
+        $event = $arguments[1];
+        if (!$event instanceof ClassDefinitionEvent) {
+            $message = $funcName . ": " . get_class($event);
+            $this->logger->log($message);
+            return;
+        }
+
+        $classDefinition = $event->getClassDefinition();
+        $classId = $classDefinition->getId();
+        $className = $classDefinition->getName();
+        $textMessage = "func $funcName: class: id: $classId name: $className";
+        $this->logger->log($textMessage);
+
+        $toEmail = $config['email'];
         if (empty($toEmail)) {
             return;
         }
@@ -57,6 +53,7 @@ class ClassEventHandler
         $hostUrl = strval(Tool::getHostUrl());
         $subject = $hostUrl . ": Class change notification";
 
+        $this->logger->log("Sending mail to $toEmail subject: $subject");
         $this->mailer->send($subject, $textMessage, $toEmail);
     }
 }
