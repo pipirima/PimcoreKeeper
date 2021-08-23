@@ -4,20 +4,20 @@ namespace Pipirima\PimcoreKeeperBundle\EventHandler;
 
 use Pimcore\Event\Model\DataObject\ClassDefinitionEvent;
 use Pimcore\Tool;
-use Pipirima\PimcoreKeeperBundle\Factory\EventHandlerInterface;
-use Pipirima\PimcoreKeeperBundle\Logger\LoggerInterface;
-use Pipirima\PimcoreKeeperBundle\Service\EventToFunctionService;
+use Pipirima\PimcoreKeeperBundle\Service\EventHandlerInterface;
+use Pipirima\PimcoreKeeperBundle\Service\Logger;
+use Pipirima\PimcoreKeeperBundle\Service\StringService;
 use Pipirima\PimcoreKeeperBundle\Service\MailerService;
 
 class ClassEventHandler implements EventHandlerInterface
 {
     protected MailerService $mailer;
 
-    protected LoggerInterface $logger;
+    protected Logger $logger;
 
-    protected EventToFunctionService $eventToFunctionService;
+    protected StringService $eventToFunctionService;
 
-    public function __construct(MailerService $mailer, LoggerInterface $logger, EventToFunctionService $eventToFunctionService)
+    public function __construct(MailerService $mailer, Logger $logger, StringService $eventToFunctionService)
     {
         $this->mailer = $mailer;
         $this->logger = $logger;

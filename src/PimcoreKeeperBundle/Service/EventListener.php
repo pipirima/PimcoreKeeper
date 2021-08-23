@@ -1,11 +1,11 @@
 <?php
 
-namespace Pipirima\PimcoreKeeperBundle\EventHandler;
+namespace Pipirima\PimcoreKeeperBundle\Service;
 
-use Pipirima\PimcoreKeeperBundle\Factory\EventHandlerFactory;
-use Pipirima\PimcoreKeeperBundle\Factory\EventHandlerInterface;
+use Pipirima\PimcoreKeeperBundle\Service\EventHandlerFactory;
+use Pipirima\PimcoreKeeperBundle\Service\EventHandlerInterface;
 use Pipirima\PimcoreKeeperBundle\Service\ConfigService;
-use Pipirima\PimcoreKeeperBundle\Service\EventToFunctionService;
+use Pipirima\PimcoreKeeperBundle\Service\StringService;
 
 class EventListener
 {
@@ -13,19 +13,19 @@ class EventListener
 
     protected ConfigService $config;
 
-    protected EventToFunctionService $eventToFunctionService;
+    protected StringService $stringService;
 
-    public function __construct(EventHandlerFactory $factory, ConfigService $config, EventToFunctionService $eventToFunctionService)
+    public function __construct(EventHandlerFactory $factory, ConfigService $config, StringService $stringService)
     {
         $this->factory = $factory;
         $this->config = $config;
-        $this->eventToFunctionService = $eventToFunctionService;
+        $this->stringService = $stringService;
     }
 
     private function isFuncNameMatchingEventsName(string $funcName, array $eventsNames): bool
     {
         foreach ($eventsNames as $eventName) {
-            $funcNameFromEventName = $this->eventToFunctionService->convertToFuncname($eventName);
+            $funcNameFromEventName = $this->stringService->eventnameToFuncname($eventName);
             if ($funcName === $funcNameFromEventName) {
                 return true;
             }

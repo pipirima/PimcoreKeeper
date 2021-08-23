@@ -1,6 +1,6 @@
 <?php
 
-namespace Pipirima\PimcoreKeeperBundle\Factory;
+namespace Pipirima\PimcoreKeeperBundle\Service;
 
 interface EventHandlerInterface
 {

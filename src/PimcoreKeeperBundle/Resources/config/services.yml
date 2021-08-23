@@ -10,26 +10,24 @@ services:
         public: false
 
     _instanceof:
-        Pipirima\PimcoreKeeperBundle\Factory\EventHandlerInterface:
+        Pipirima\PimcoreKeeperBundle\Service\EventHandlerInterface:
             tags:
                 - { name: pimcore_keeper.event_listener }
-    Pipirima\PimcoreKeeperBundle\Factory\EventHandlerFactory:
+    Pipirima\PimcoreKeeperBundle\Service\EventHandlerFactory:
         arguments: [!tagged pimcore_keeper.event_listener]
 
     Pipirima\PimcoreKeeperBundle\EventHandler\ClassEventHandler: ~
 
-    Pipirima\PimcoreKeeperBundle\Logger\LoggerInterface:
-        class: Pipirima\PimcoreKeeperBundle\Logger\Logger
-
+    Pipirima\PimcoreKeeperBundle\Service\Logger: ~
     Pipirima\PimcoreKeeperBundle\Service\MailerService: ~
     Pipirima\PimcoreKeeperBundle\Service\MailFactory: ~
     Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService: ~
-    Pipirima\PimcoreKeeperBundle\Service\EventToFunctionService: ~
+    Pipirima\PimcoreKeeperBundle\Service\StringService: ~
     Pipirima\PimcoreKeeperBundle\Service\ConfigService:
         arguments:
             - '%pimcore_keeper.alerts%'
 
-    Pipirima\PimcoreKeeperBundle\EventHandler\EventListener:
+    Pipirima\PimcoreKeeperBundle\Service\EventListener:
         tags:
             - { name: kernel.event_listener, event: pimcore.class.preAdd }
             - { name: kernel.event_listener, event: pimcore.class.postAdd }

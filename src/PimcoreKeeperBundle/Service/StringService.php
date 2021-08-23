@@ -2,9 +2,9 @@
 
 namespace Pipirima\PimcoreKeeperBundle\Service;
 
-class EventToFunctionService
+class StringService
 {
-    public function convertToFuncname(string $eventName): string
+    public function eventnameToFuncname(string $eventName): string
     {
         $pieces = explode('.', $eventName);
         $pieces = array_map(function(string $str) { return ucfirst($str); }, $pieces);
