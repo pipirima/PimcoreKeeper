@@ -10,5 +10,4 @@ use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
  */
 class PimcoreKeeperBundle extends AbstractPimcoreBundle
 {
-    const LOG_FILE = 'pimcore_keeper';
 }
