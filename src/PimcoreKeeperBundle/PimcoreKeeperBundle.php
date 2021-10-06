@@ -10,4 +10,5 @@ use Pimcore\Extension\Bundle\AbstractPimcoreBundle;
  */
 class PimcoreKeeperBundle extends AbstractPimcoreBundle
 {
+    const BUNDLE_CODE = 'pimcore_keeper';
 }

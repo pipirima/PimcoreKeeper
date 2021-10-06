@@ -23,8 +23,13 @@ class PimcoreKeeperExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        // use this to load your custom configurations
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
+
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
+
+        $container->setParameter($this->getAlias() . '.alerts', $config['alerts']);
+        $container->setParameter($this->getAlias() . '.debug', $config['debug']);
     }
 }
