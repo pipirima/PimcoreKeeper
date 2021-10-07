@@ -29,3 +29,11 @@ services:
             - method: setPimcoreKeeperService
               arguments:
                   - '@Pipirima\PimcoreKeeperBundle\Service\PimcoreKeeperService'
+
+    Pipirima\PimcoreKeeperBundle\Service\Logger:
+        arguments:
+            - '%pimcore_keeper.debug%'
+
+    Pipirima\PimcoreKeeperBundle\Service\ConfigService:
+        arguments:
+            - '%pimcore_keeper.alerts%'

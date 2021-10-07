@@ -9,10 +9,17 @@ class PimcoreKeeperService
 {
     const KEEPER_OBJECT_WS = 'keeper_object';
 
+    private ConfigService $configService;
+
+    private Logger $logger;
+
     private array $config = [];
 
-    public function __construct()
+    public function __construct(ConfigService $configService, Logger $logger)
     {
+        $this->configService = $configService;
+        $this->logger = $logger;
+
         $this->config = $this->getWsParsedConfig();
     }
 
@@ -101,17 +108,6 @@ class PimcoreKeeperService
     }
 
     /**
-     * @param string $message
-     */
-    private function log(string $message)
-    {
-        $filename = 'keeper_events.log';
-        $content = file_exists($filename) ? file_get_contents($filename) : '';
-        $content .= $message . "\n";
-        file_put_contents($filename, $content);
-    }
-
-    /**
      * @param Concrete $objectFromDatabase
      * @param array $updatedFields
      */
@@ -164,7 +160,7 @@ class PimcoreKeeperService
             $mail->send();
         } catch (\Exception $e) {
             $message = "sendmail exception: " . $e->getMessage();
-            $this->log($message);
+            $this->logger->log($message);
         }
     }
 }

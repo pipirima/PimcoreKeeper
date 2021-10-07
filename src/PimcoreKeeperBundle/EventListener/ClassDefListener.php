@@ -4,52 +4,66 @@ namespace Pipirima\PimcoreKeeperBundle\EventListener;
 
 use Pimcore\Event\Model\DataObject\ClassDefinitionEvent;
 use Pimcore\Tool;
+use Pipirima\PimcoreKeeperBundle\Service\ConfigService;
+use Pipirima\PimcoreKeeperBundle\Service\Logger;
 use Pipirima\PimcoreKeeperBundle\Service\MailerService;
 use Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService;
-use Psr\Log\LoggerInterface;
 
 class ClassDefListener
 {
-    const KEEPER_EMAIL_WS = 'keeper_class';
-
-    protected LoggerInterface $logger;
+    protected Logger $logger;
     protected MailerService $mailer;
-    protected WebsiteSettingsService $websiteSettingsService;
+    protected ConfigService $configService;
+
+    protected array $emails;
 
     public function __construct(
-        LoggerInterface $logger,
+        Logger $logger,
         MailerService $mailer,
-        WebsiteSettingsService $websiteSettingsService
+        ConfigService $configService
     ) {
         $this->logger = $logger;
         $this->mailer = $mailer;
-        $this->websiteSettingsService = $websiteSettingsService;
+        $this->configService = $configService;
+        $this->emails = $this->getEmails();
     }
 
     public function __call(string $funcName, array $funcArguments)
     {
         $event = $funcArguments[0];
         if (!$event instanceof ClassDefinitionEvent) {
-            $this->logger->debug('PimcoreKeeper: ' . $funcName . ": " . get_class($event));
+            $this->logger->log('PimcoreKeeper: ' . $funcName . ": " . get_class($event));
             return;
         }
         $classDefinition = $event->getClassDefinition();
         $classId = $classDefinition->getId();
         $className = $classDefinition->getName();
         $textMessage = "PimcoreKeeper: func $funcName: class: id: $classId name: $className";
-        $this->logger->debug($textMessage);
+        $this->logger->log($textMessage);
         if (false !== strpos($funcName, "Pre")) {
-            return;
-        }
-
-        $toEmail = $this->websiteSettingsService->getTextValue(self::KEEPER_EMAIL_WS);
-        if (empty($toEmail)) {
             return;
         }
 
         $hostUrl = strval(Tool::getHostUrl());
         $subject = $hostUrl . ": Class change notification";
 
-        $this->mailer->send($subject, $textMessage, $toEmail);
+        foreach ($this->emails as $email) {
+            $this->mailer->send($subject, $textMessage, $email);
+        }
+    }
+
+    private function getEmails(): array
+    {
+        $emails = [];
+        foreach ($this->configService->getConfig() as $configItem) {
+            if (($configItem['type'] ?? '') != 'class') {
+                continue;
+            }
+            foreach (($configItem['emails'] ?? []) as $email) {
+                $emails[] = $email;
+            }
+        }
+
+        return $emails;
     }
 }

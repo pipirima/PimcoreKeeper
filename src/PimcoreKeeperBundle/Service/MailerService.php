@@ -2,23 +2,21 @@
 
 namespace Pipirima\PimcoreKeeperBundle\Service;
 
-use Psr\Log\LoggerInterface;
-
 /**
  * Class MailerService
  * @package Pipirima\PimcoreKeeperBundle\Service
  */
 class MailerService
 {
-    protected LoggerInterface $logger;
+    protected Logger $logger;
     protected MailFactory $mailFactory;
 
     /**
      * MailerService constructor.
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      * @param MailFactory $mailFactory
      */
-    public function __construct(LoggerInterface $logger, MailFactory $mailFactory)
+    public function __construct(Logger $logger, MailFactory $mailFactory)
     {
         $this->logger = $logger;
         $this->mailFactory = $mailFactory;
@@ -40,7 +38,7 @@ class MailerService
             $mail->send();
         } catch (\Exception $e) {
             $message = 'PimcoreKeeper: ' . 'sendmail exception: ' . $e->getMessage();
-            $this->logger->error($message);
+            $this->logger->log($message);
             throw $e;
         }
     }
