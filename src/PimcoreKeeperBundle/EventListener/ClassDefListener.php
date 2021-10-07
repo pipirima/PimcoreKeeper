@@ -7,7 +7,6 @@ use Pimcore\Tool;
 use Pipirima\PimcoreKeeperBundle\Service\ConfigService;
 use Pipirima\PimcoreKeeperBundle\Service\Logger;
 use Pipirima\PimcoreKeeperBundle\Service\MailerService;
-use Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService;
 
 class ClassDefListener
 {

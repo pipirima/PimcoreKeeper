@@ -18,7 +18,6 @@ services:
             - { name: kernel.event_listener, event: pimcore.class.postDelete }
     Pipirima\PimcoreKeeperBundle\Service\MailerService: ~
     Pipirima\PimcoreKeeperBundle\Service\MailFactory: ~
-    Pipirima\PimcoreKeeperBundle\Service\WebsiteSettingsService: ~
 
     Pipirima\PimcoreKeeperBundle\Service\PimcoreKeeperService: ~
 
