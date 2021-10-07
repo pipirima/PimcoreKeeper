@@ -10,7 +10,7 @@ use Psr\Log\LoggerInterface;
 
 class ClassDefListener
 {
-    const KEEPER_EMAIL_WS = 'keeper_email';
+    const KEEPER_EMAIL_WS = 'keeper_class';
 
     protected LoggerInterface $logger;
     protected MailerService $mailer;

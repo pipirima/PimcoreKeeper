@@ -1,0 +1,6 @@
+_keeper_admin_app:
+  resource: "@PimcoreKeeperBundle/Controller/Admin/"
+  type:     annotation
+  prefix:   /admin
+  options:
+    expose: true
