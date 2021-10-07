@@ -19,15 +19,15 @@ services:
     Pipirima\PimcoreKeeperBundle\Service\MailerService: ~
     Pipirima\PimcoreKeeperBundle\Service\MailFactory: ~
 
-    Pipirima\PimcoreKeeperBundle\Service\PimcoreKeeperService: ~
+    Pipirima\PimcoreKeeperBundle\Service\ObjectKeeperService: ~
 
     Pipirima\PimcoreKeeperBundle\Controller\Admin\DataObjectController:
         public: true
         tags: ['controller.service_arguments']
         calls:
-            - method: setPimcoreKeeperService
+            - method: setObjectKeeperService
               arguments:
-                  - '@Pipirima\PimcoreKeeperBundle\Service\PimcoreKeeperService'
+                  - '@Pipirima\PimcoreKeeperBundle\Service\ObjectKeeperService'
 
     Pipirima\PimcoreKeeperBundle\Service\Logger:
         arguments:

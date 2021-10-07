@@ -1,0 +1,36 @@
+pimcore_keeper:
+# true or false
+  debug: false
+# list of alerts
+  alerts:
+    -
+# 'class' or 'object'; there may be several items for any type
+      type: 'class'
+      emails:
+        - 'mail1@example.com'
+        - 'mail2@example.com'
+    -
+      type: 'object'
+      emails:
+        - 'mail1@example.com'
+        - 'mail2@example.com'
+      class: 'Product'
+      indexField: 'sku'
+      indexFieldName: 'SKU'
+      fields:
+        - 'field1'
+        - 'field2'
+        - 'field3'
+        - 'field4'
+
+    -
+      type: 'object'
+      emails:
+        - 'mail1@example.com'
+        - 'mail2@example.com'
+      class: 'Category'
+      indexField: 'name'
+      indexFieldName: 'Category name:'
+      fields:
+        - 'field7
+        - 'field8'

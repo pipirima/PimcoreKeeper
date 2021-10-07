@@ -2,7 +2,7 @@
 
 namespace Pipirima\PimcoreKeeperBundle\Controller\Admin;
 
-use Pipirima\PimcoreKeeperBundle\Service\PimcoreKeeperService;
+use Pipirima\PimcoreKeeperBundle\Service\ObjectKeeperService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class DataObjectController extends \Pimcore\Bundle\AdminBundle\Controller\Admin\DataObject\DataObjectController
 {
-    protected PimcoreKeeperService $pimcoreKeeperService;
+    protected ObjectKeeperService $objectKeeperService;
 
     /**
      * @Route("/save", name="pimcore_admin_dataobject_dataobject_save", methods={"POST", "PUT"})
@@ -28,16 +28,16 @@ class DataObjectController extends \Pimcore\Bundle\AdminBundle\Controller\Admin\
         $id = intval($request->get('id'));
         $data = strval($request->get('data'));
         if ($id && $data) {
-            $this->pimcoreKeeperService->processSaveObjectData($id, $this->decodeJson($data));
+            $this->objectKeeperService->processSaveObjectData($id, $this->decodeJson($data));
         }
         return parent::saveAction($request);
     }
 
     /**
-     * @param PimcoreKeeperService $pimcoreKeeperService
+     * @param ObjectKeeperService $objectKeeperService
      */
-    public function setPimcoreKeeperService(PimcoreKeeperService $pimcoreKeeperService)
+    public function setObjectKeeperService(ObjectKeeperService $objectKeeperService)
     {
-        $this->pimcoreKeeperService = $pimcoreKeeperService;
+        $this->objectKeeperService = $objectKeeperService;
     }
 }
