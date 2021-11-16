@@ -29,7 +29,7 @@ class PimcoreKeeperExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter($this->getAlias() . '.alerts', $config['alerts']);
-        $container->setParameter($this->getAlias() . '.debug', $config['debug']);
+        $container->setParameter($this->getAlias() . '.alerts', $config['alerts'] ?? []);
+        $container->setParameter($this->getAlias() . '.debug', $config['debug'] ?? false);
     }
 }
