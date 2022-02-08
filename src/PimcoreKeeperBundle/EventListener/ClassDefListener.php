@@ -44,7 +44,7 @@ class ClassDefListener
         }
 
         $hostUrl = strval(Tool::getHostUrl());
-        $subject = $hostUrl . ": Class change notification";
+        $subject = "$hostUrl : Class change notification: $className (ID:$classId)";
 
         foreach ($this->emails as $email) {
             $this->mailer->send($subject, $textMessage, $email);
